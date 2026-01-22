@@ -1,6 +1,7 @@
+// Ensure this is used for EVERY request
 const api = axios.create({ 
-  baseURL: import.meta.env.VITE_BACKEND_URL || "http://localhost:5000",
-  withCredentials: true
+  baseURL: "https://voting-platform-3soe.onrender.com",
+  withCredentials: true // Essential for cross-domain cookies
 });
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -16,35 +17,37 @@ const Vote = () => {
   const listRef = useRef(null);
 
   axios.defaults.withCredentials = true;
-useEffect(() => {
+  useEffect(() => {
     const checkAuthAndFetch = async () => {
       try {
-          // 1. Check Auth using your 'api' instance
-          const authRes = await api.get("/auth/login/success");
+        // Use your standardized 'api' instance here
+        const authRes = await api.get("/auth/login/success");
 
-          if (authRes.data.needsProfileUpdate) {
-              window.location.href = "/complete-profile";
-              return;
-          }
+        if (authRes.data.needsProfileUpdate) {
+          window.location.href = "/complete-profile";
+          return;
+        }
+        
+        setUser(authRes.data.user);
+        if (authRes.data.user.hasVoted) setVoted(true); 
+
+        // Fetch other data through the same authenticated instance
+        const [candRes, voterRes] = await Promise.all([
+          api.get("/api/candidates"),
+          api.get("/api/vote/voters")
+        ]);
+
+        setCandidates(candRes.data);
+        setVoters(voterRes.data);
           
-          setUser(authRes.data.user);
-          if (authRes.data.user.hasVoted) setVoted(true); 
-
-          // 2. Fetch Candidates using 'api' instance
-          const candRes = await api.get("/api/candidates");
-          setCandidates(candRes.data);
-
-          // 3. Fetch Voters using 'api' instance
-          const voterRes = await api.get("/api/vote/voters");
-          setVoters(voterRes.data);
-            
       } catch (err) {
-          console.error("Auth check failed:", err);
-          window.location.href = "/"; 
+        console.error("Session missing or expired:", err);
+        // This is what is kicking you back to the login page
+        window.location.href = "/"; 
       }
     };
     checkAuthAndFetch();
-  } , []);
+  }, []);
 
   const handleVote = async (candidateName) => {
       try {

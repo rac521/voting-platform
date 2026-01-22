@@ -20,17 +20,17 @@ app.set('trust proxy', 1);
 // --- 1. Middleware Stack ---
 app.use(express.json());
 app.use(cors({ 
-  origin: process.env.FRONTEND_URL || "http://localhost:5173", 
+  origin: process.env.FRONTEND_URL , 
   credentials: true 
 }));
 app.use(session({ 
     secret: "voting_secret", 
     resave: false, 
     saveUninitialized: false,
-    proxy:true,
+    proxy: true, // MUST be true for Render/Vercel
     cookie: { 
-        secure: true, // Set to true if using HTTPS
-        sameSite: 'none', // Adjust based on your frontend domain
+        secure: true, // MUST be true for HTTPS (Render provides this)
+        sameSite: 'none', // MUST be 'none' for Vercel -> Render communication
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000 
     } 
