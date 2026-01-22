@@ -23,19 +23,25 @@ app.use(cors({
   origin: process.env.FRONTEND_URL , 
   credentials: true 
 }));
-app.use(session({ 
-    secret: "voting_secret", 
-    resave: false, 
+const MongoStore = require('connect-mongo');
+
+// ... in your middleware section
+app.use(session({
+    secret: "voting_secret",
+    resave: false,
     saveUninitialized: false,
-    proxy: true, // MUST be true for Render/Vercel
-    cookie: { 
-        secure: true, // MUST be true for HTTPS (Render provides this)
-        sameSite: 'none', // MUST be 'none' for Vercel -> Render communication
+    proxy: true, 
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URI,
+        collectionName: 'sessions'
+    }),
+    cookie: {
+        secure: true,
+        sameSite: 'none',
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000 
-    } 
+    }
 }));
-
 app.use(passport.initialize());
 app.use(passport.session());
 
