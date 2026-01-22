@@ -1,6 +1,6 @@
-const api = axios.create({
-  baseURL: "https://voting-platform-3soe.onrender.com",
-  withCredentials: true // This FORCES it for every single call
+const api = axios.create({ 
+  baseURL: import.meta.env.VITE_BACKEND_URL || "http://localhost:5000",
+  withCredentials: true
 });
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
