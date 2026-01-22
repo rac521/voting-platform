@@ -16,19 +16,30 @@ const Vote = () => {
   useEffect(() => {
     const checkAuthAndFetch = async () => {
       try {
-        const authRes = await axios.get("https://voting-platform-3soe.onrender.com/auth/login/success");
+        // Corrected: withCredentials is now inside the config object
+        const authRes = await axios.get("https://voting-platform-3soe.onrender.com/auth/login/success", { 
+          withCredentials: true 
+        });
+
         if (authRes.data.needsProfileUpdate) {
           window.location.href = "/complete-profile";
           return;
         }
+        
         setUser(authRes.data.user);
         if (authRes.data.user.hasVoted) setVoted(true); 
-        
-        const candRes = await axios.get("https://voting-platform-3soe.onrender.com/api/candidates");
+
+        // Apply to other GET requests too
+        const candRes = await axios.get("https://voting-platform-3soe.onrender.com/api/candidates", { 
+          withCredentials: true 
+        });
         setCandidates(candRes.data);
 
-        const voterRes = await axios.get("https://voting-platform-3soe.onrender.com/api/vote/voters");
+        const voterRes = await axios.get("https://voting-platform-3soe.onrender.com/api/vote/voters", { 
+          withCredentials: true 
+        });
         setVoters(voterRes.data);
+        
       } catch (err) {
         window.location.href = "/"; 
       }
