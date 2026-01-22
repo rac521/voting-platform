@@ -16,49 +16,91 @@ const Vote = () => {
   const listRef = useRef(null);
 
   axios.defaults.withCredentials = true;
-
-  useEffect(() => {
+useEffect(() => {
     const checkAuthAndFetch = async () => {
       try {
-        // Corrected: withCredentials is now inside the config object
-        const authRes = await api.get("https://voting-platform-3soe.onrender.com/auth/login/success", { 
-          withCredentials: true 
-        });
+          // 1. Check Auth using your 'api' instance
+          const authRes = await api.get("/auth/login/success");
 
-        if (authRes.data.needsProfileUpdate) {
-          window.location.href = "/complete-profile";
-          return;
-        }
-        
-        setUser(authRes.data.user);
-        if (authRes.data.user.hasVoted) setVoted(true); 
+          if (authRes.data.needsProfileUpdate) {
+              window.location.href = "/complete-profile";
+              return;
+          }
+          
+          setUser(authRes.data.user);
+          if (authRes.data.user.hasVoted) setVoted(true); 
 
-        // Apply to other GET requests too
-        const candRes = await axios.get("https://voting-platform-3soe.onrender.com/api/candidates", { 
-          withCredentials: true 
-        });
-        setCandidates(candRes.data);
+          // 2. Fetch Candidates using 'api' instance
+          const candRes = await api.get("/api/candidates");
+          setCandidates(candRes.data);
 
-        const voterRes = await axios.get("https://voting-platform-3soe.onrender.com/api/vote/voters", { 
-          withCredentials: true 
-        });
-        setVoters(voterRes.data);
-        
+          // 3. Fetch Voters using 'api' instance
+          const voterRes = await api.get("/api/vote/voters");
+          setVoters(voterRes.data);
+            
       } catch (err) {
-        window.location.href = "/"; 
+          console.error("Auth check failed:", err);
+          window.location.href = "/"; 
       }
     };
     checkAuthAndFetch();
-  }, []);
+  } , []);
 
   const handleVote = async (candidateName) => {
-    try {
-      await axios.post("https://voting-platform-3soe.onrender.com/api/vote/cast", { userId: user._id, candidateName }, { withCredentials: true });
-      setVoted(true); 
-      const res = await axios.get("https://voting-platform-3soe.onrender.com/api/vote/voters", { withCredentials: true });
-      setVoters(res.data);
-    } catch (err) { alert("Error casting vote."); }
+      try {
+          // Use 'api' instance for the POST request
+          await api.post("/api/vote/cast", { userId: user._id, candidateName });
+          setVoted(true); 
+          
+          const res = await api.get("/api/vote/voters");
+          setVoters(res.data);
+      } catch (err) { 
+          alert("Error casting vote."); 
+      }
   };
+  
+  // useEffect(() => {
+  //   const checkAuthAndFetch = async () => {
+  //     try {
+  //       // Corrected: withCredentials is now inside the config object
+  //       const authRes = await api.get("https://voting-platform-3soe.onrender.com/auth/login/success", { 
+  //         withCredentials: true 
+  //       });
+
+  //       if (authRes.data.needsProfileUpdate) {
+  //         window.location.href = "/complete-profile";
+  //         return;
+  //       }
+        
+  //       setUser(authRes.data.user);
+  //       if (authRes.data.user.hasVoted) setVoted(true); 
+
+  //       // Apply to other GET requests too
+  //       const candRes = await axios.get("https://voting-platform-3soe.onrender.com/api/candidates", { 
+  //         withCredentials: true 
+  //       });
+  //       setCandidates(candRes.data);
+
+  //       const voterRes = await axios.get("https://voting-platform-3soe.onrender.com/api/vote/voters", { 
+  //         withCredentials: true 
+  //       });
+  //       setVoters(voterRes.data);
+        
+  //     } catch (err) {
+  //       window.location.href = "/"; 
+  //     }
+  //   };
+  //   checkAuthAndFetch();
+  // }, []);
+
+  // const handleVote = async (candidateName) => {
+  //   try {
+  //     await axios.post("https://voting-platform-3soe.onrender.com/api/vote/cast", { userId: user._id, candidateName }, { withCredentials: true });
+  //     setVoted(true); 
+  //     const res = await axios.get("https://voting-platform-3soe.onrender.com/api/vote/voters", { withCredentials: true });
+  //     setVoters(res.data);
+  //   } catch (err) { alert("Error casting vote."); }
+  // };
 
   return (
     <div className="w-full max-w-4xl mx-auto relative z-10 p-6 space-y-6">
