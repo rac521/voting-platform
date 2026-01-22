@@ -117,7 +117,7 @@ router.get("/linkedin", passport.authenticate("linkedin", {
 router.get("/linkedin/callback", 
     passport.authenticate("linkedin", { 
         failureRedirect: "http://localhost:5173/",
-        successRedirect: "https://voting-platform-cyan.vercel.app/vote/vote" 
+        successRedirect: "https://voting-platform-cyan.vercel.app/vote" 
     })
 );
 

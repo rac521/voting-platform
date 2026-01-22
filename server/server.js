@@ -27,8 +27,10 @@ app.use(session({
     secret: "voting_secret", 
     resave: false, 
     saveUninitialized: false,
+    proxy:true,
     cookie: { 
-        secure: false, // Set to true if using HTTPS
+        secure: true, // Set to true if using HTTPS
+        sameSite: 'none', // Adjust based on your frontend domain
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000 
     } 
