@@ -1,3 +1,7 @@
+const api = axios.create({
+  baseURL: "https://voting-platform-3soe.onrender.com",
+  withCredentials: true // This FORCES it for every single call
+});
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LogOut, Linkedin, Sparkles, User, Home, Trophy, Users, TrendingUp } from "lucide-react";
@@ -17,7 +21,7 @@ const Vote = () => {
     const checkAuthAndFetch = async () => {
       try {
         // Corrected: withCredentials is now inside the config object
-        const authRes = await axios.get("https://voting-platform-3soe.onrender.com/auth/login/success", { 
+        const authRes = await api.get("https://voting-platform-3soe.onrender.com/auth/login/success", { 
           withCredentials: true 
         });
 
@@ -49,9 +53,9 @@ const Vote = () => {
 
   const handleVote = async (candidateName) => {
     try {
-      await axios.post("https://voting-platform-3soe.onrender.com/api/vote/cast", { userId: user._id, candidateName });
+      await axios.post("https://voting-platform-3soe.onrender.com/api/vote/cast", { userId: user._id, candidateName }, { withCredentials: true });
       setVoted(true); 
-      const res = await axios.get("https://voting-platform-3soe.onrender.com/api/vote/voters");
+      const res = await axios.get("https://voting-platform-3soe.onrender.com/api/vote/voters", { withCredentials: true });
       setVoters(res.data);
     } catch (err) { alert("Error casting vote."); }
   };
