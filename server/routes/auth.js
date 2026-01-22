@@ -39,7 +39,7 @@ router.post("/forgot-password", async (req, res) => {
             },
         });
 
-        const resetLink = `http://localhost:5173/reset-password/${user._id}`;
+        const resetLink = `https://voting-platform-cyan.vercel.app/${user._id}`;
 
         const mailOptions = {
             from: process.env.EMAIL_USER,
@@ -106,8 +106,8 @@ router.post("/login", async (req, res) => {
 // --- Google Auth ---
 router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 router.get("/google/callback", 
-    passport.authenticate("google", { failureRedirect: "http://localhost:5173/" }),
-    (req, res) => res.redirect("http://localhost:5173/vote")
+    passport.authenticate("google", { failureRedirect: "https://voting-platform-cyan.vercel.app/" }),
+    (req, res) => res.redirect("https://voting-platform-cyan.vercel.app/vote")
 );
 
 // --- LinkedIn Auth ---
@@ -116,8 +116,8 @@ router.get("/linkedin", passport.authenticate("linkedin", {
 }));
 router.get("/linkedin/callback", 
     passport.authenticate("linkedin", { 
-        failureRedirect: "http://localhost:5173/",
-        successRedirect: "http://localhost:5173/vote" 
+        failureRedirect: "https://voting-platform-cyan.vercel.app/",
+        successRedirect: "https://voting-platform-cyan.vercel.app/vote" 
     })
 );
 
@@ -130,7 +130,7 @@ router.get("/logout", (req, res, next) => {
             if (err) return next(err);
             res.clearCookie("connect.sid"); 
             // Important: Use an absolute URL for redirect to ensure it leaves the API domain
-            return res.redirect("http://localhost:5173/"); 
+            return res.redirect("https://voting-platform-cyan.vercel.app/"); 
         });
     });
 });
