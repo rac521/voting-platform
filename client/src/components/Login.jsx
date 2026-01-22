@@ -13,7 +13,7 @@ function Login() {
     e.preventDefault();
     try {
       // Functional Logic: Linking to your specific backend route
-      const res = await axios.post("http://localhost:5000/auth/login", { email, password }, { withCredentials: true });
+      const res = await axios.post("https://voting-platform-3soe.onrender.com/auth/login", { email, password }, { withCredentials: true });
       if (res.data.success) window.location.href = "/vote";
     } catch (err) { 
       alert("Login failed"); 
@@ -21,11 +21,11 @@ function Login() {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:5000/auth/google";
+    window.location.href = "https://voting-platform-3soe.onrender.com/auth/google";
   };
 
   const handleLinkedInLogin = () => {
-    window.location.href = "http://localhost:5000/auth/linkedin";
+    window.location.href = "https://voting-platform-3soe.onrender.com/auth/linkedin";
   };
 
   return (

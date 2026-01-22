@@ -15,6 +15,7 @@ const authRoutes = require('./routes/auth');
 const voteRoutes = require('./routes/vote');
 
 const app = express();
+app.set('trust proxy', 1);
 
 // --- 1. Middleware Stack ---
 app.use(express.json());
@@ -75,7 +76,7 @@ passport.use(new GoogleStrategy({
 passport.use(new LinkedInStrategy({
     clientID: process.env.LINKEDIN_CLIENT_ID,
     clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
-    callbackURL: "http://localhost:5000/auth/linkedin/callback",
+    callbackURL: "/auth/linkedin/callback",
     scope: ['openid', 'profile', 'email'], 
     state: true
   }, 

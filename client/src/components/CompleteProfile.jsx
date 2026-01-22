@@ -14,7 +14,7 @@ const CompleteProfile = () => {
     setLoading(true);
     try {
       await axios.post(
-        "http://localhost:5000/api/user/update-linkedin", 
+        "https://voting-platform-3soe.onrender.com/api/user/update-linkedin", 
         { linkedInProfile: url }, 
         { withCredentials: true }
       );

@@ -19,7 +19,7 @@ function Signup() {
 
     try {
       // Functional Logic: API call to your backend exactly as you had it
-      const res = await axios.post("http://localhost:5000/auth/signup", form, { 
+      const res = await axios.post("https://voting-platform-3soe.onrender.com/auth/signup", form, { 
         withCredentials: true 
       });
       
@@ -33,11 +33,11 @@ function Signup() {
   };
 
   const handleGoogleSignup = () => {
-    window.location.href = "http://localhost:5000/auth/google";
+    window.location.href = "https://voting-platform-3soe.onrender.com/auth/google";
   };
 
   const handleLinkedInSignup = () => {
-    window.location.href = "http://localhost:5000/auth/linkedin";
+    window.location.href = "https://voting-platform-3soe.onrender.com/auth/linkedin";
   };
 
   return (

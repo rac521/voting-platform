@@ -16,7 +16,7 @@ const Vote = () => {
   useEffect(() => {
     const checkAuthAndFetch = async () => {
       try {
-        const authRes = await axios.get("http://localhost:5000/auth/login/success");
+        const authRes = await axios.get("https://voting-platform-3soe.onrender.com/auth/login/success");
         if (authRes.data.needsProfileUpdate) {
           window.location.href = "/complete-profile";
           return;
@@ -24,10 +24,10 @@ const Vote = () => {
         setUser(authRes.data.user);
         if (authRes.data.user.hasVoted) setVoted(true); 
         
-        const candRes = await axios.get("http://localhost:5000/api/candidates");
+        const candRes = await axios.get("https://voting-platform-3soe.onrender.com/api/candidates");
         setCandidates(candRes.data);
 
-        const voterRes = await axios.get("http://localhost:5000/api/vote/voters");
+        const voterRes = await axios.get("https://voting-platform-3soe.onrender.com/api/vote/voters");
         setVoters(voterRes.data);
       } catch (err) {
         window.location.href = "/"; 
@@ -38,9 +38,9 @@ const Vote = () => {
 
   const handleVote = async (candidateName) => {
     try {
-      await axios.post("http://localhost:5000/api/vote/cast", { userId: user._id, candidateName });
+      await axios.post("https://voting-platform-3soe.onrender.com/api/vote/cast", { userId: user._id, candidateName });
       setVoted(true); 
-      const res = await axios.get("http://localhost:5000/api/vote/voters");
+      const res = await axios.get("https://voting-platform-3soe.onrender.com/api/vote/voters");
       setVoters(res.data);
     } catch (err) { alert("Error casting vote."); }
   };
@@ -64,7 +64,7 @@ const Vote = () => {
                 <p className="text-gray-500 font-medium italic">Welcome, {user?.name}</p>
               </div>
             </div>
-            <motion.button whileHover={{ scale: 1.05 }} onClick={() => window.location.href = "http://localhost:5000/auth/logout"} className="px-6 py-3 bg-red-50 text-red-500 rounded-2xl font-bold border border-red-100 flex items-center gap-2">
+            <motion.button whileHover={{ scale: 1.05 }} onClick={() => window.location.href = "https://voting-platform-3soe.onrender.com/auth/logout"} className="px-6 py-3 bg-red-50 text-red-500 rounded-2xl font-bold border border-red-100 flex items-center gap-2">
               <LogOut size={20} /> Logout
             </motion.button>
           </div>

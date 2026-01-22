@@ -26,7 +26,7 @@ const ResetPassword = () => {
     }
     try {
       // Functional Logic: Hits your backend reset route
-      const res = await axios.post(`http://localhost:5000/auth/reset-password/${id}`, { 
+      const res = await axios.post(`https://voting-platform-3soe.onrender.com/auth/reset-password/${id}`, { 
         password: newPassword 
       });
       
