@@ -23,14 +23,13 @@ app.use(cors({
   origin: process.env.FRONTEND_URL , 
   credentials: true 
 }));
-const MongoStore = require('connect-mongo');
+const MongoStore = require('connect-mongo').default;
 
 // ... in your middleware section
 app.use(session({
     secret: "voting_secret",
     resave: false,
     saveUninitialized: false,
-    proxy: true, 
     store: MongoStore.create({
         mongoUrl: process.env.MONGO_URI,
         collectionName: 'sessions'
