@@ -116,9 +116,8 @@ router.get("/linkedin", passport.authenticate("linkedin", {
 }));
 router.get("/linkedin/callback", 
     passport.authenticate("linkedin", { 
-        failureRedirect: "https://voting-platform-cyan.vercel.app/",
-        successRedirect: "https://voting-platform-cyan.vercel.app/vote" 
-    })
+        failureRedirect: "https://voting-platform-cyan.vercel.app/"}),
+        (req, res) => res.redirect("https://voting-platform-cyan.vercel.app/vote")
 );
 
 // --- LOGOUT (Fixing the "Cannot GET /auth/logout") ---

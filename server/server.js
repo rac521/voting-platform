@@ -80,31 +80,67 @@ passport.use(new GoogleStrategy({
 ));
 
 // --- 5. LinkedIn Strategy (Standardized OIDC) ---
+// passport.use(new LinkedInStrategy({
+//     clientID: process.env.LINKEDIN_CLIENT_ID,
+//     clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
+//     callbackURL: "https://voting-platform-3soe.onrender.com/auth/linkedin/callback",
+//     scope: ['openid', 'profile', 'email'], 
+//     state: true
+//   }, 
+//   async (accessToken, refreshToken, profile, done) => {
+//     try {
+//       const email = (profile.emails && profile.emails[0]) ? profile.emails[0].value : profile.email;
+//       const name = profile.displayName || `${profile.name.givenName} ${profile.name.familyName}`;
+
+//       if (!email) return done(new Error("No email found"), null);
+
+//       let user = await User.findOne({ email: email });
+//       if (!user) {
+//         user = await User.create({
+//           name: name,
+//           email: email,
+//           linkedInProfile: "#",
+//           hasVoted: false
+//         });
+//       }
+//       return done(null, user);
+//     } catch (err) {
+//       return done(err, null);
+//     }
+//   }
+// ));
 passport.use(new LinkedInStrategy({
     clientID: process.env.LINKEDIN_CLIENT_ID,
     clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
-    callbackURL: "/auth/linkedin/callback",
-    scope: ['openid', 'profile', 'email'], 
+    callbackURL: "https://voting-platform-3soe.onrender.com/auth/linkedin/callback",
+    scope: ['openid', 'profile', 'email'],
     state: true
-  }, 
+  },
   async (accessToken, refreshToken, profile, done) => {
     try {
-      const email = (profile.emails && profile.emails[0]) ? profile.emails[0].value : profile.email;
-      const name = profile.displayName || `${profile.name.givenName} ${profile.name.familyName}`;
-
-      if (!email) return done(new Error("No email found"), null);
-
+      // 1. Correctly extract the email from the LinkedIn profile
+      const email = profile.emails[0].value;
+      
+      // 2. Check if a user with this email already exists
       let user = await User.findOne({ email: email });
+
+      // 3. Only create if the user does NOT exist
       if (!user) {
         user = await User.create({
-          name: name,
+          name: profile.displayName,
           email: email,
           linkedInProfile: "#",
           hasVoted: false
         });
       }
+      
       return done(null, user);
     } catch (err) {
+      // If it's a duplicate key error, we can find the user instead
+      if (err.code === 11000) {
+         const user = await User.findOne({ email: profile.emails[0].value });
+         return done(null, user);
+      }
       return done(err, null);
     }
   }
