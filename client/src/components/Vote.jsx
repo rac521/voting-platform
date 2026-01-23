@@ -1,8 +1,4 @@
-// Ensure this is used for EVERY request
-const api = axios.create({ 
-  baseURL: "https://voting-platform-3soe.onrender.com",
-  withCredentials: true // Essential for cross-domain cookies
-});
+import api from '../api';
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LogOut, Linkedin, Sparkles, User, Home, Trophy, Users, TrendingUp } from "lucide-react";
@@ -16,7 +12,7 @@ const Vote = () => {
   const [showVotersList, setShowVotersList] = useState(false);
   const listRef = useRef(null);
 
-  axios.defaults.withCredentials = true;
+  api.defaults.withCredentials = true;
   useEffect(() => {
     const checkAuthAndFetch = async () => {
       try {

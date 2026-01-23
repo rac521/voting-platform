@@ -20,7 +20,7 @@ app.set('trust proxy', 1);
 // --- 1. Middleware Stack ---
 app.use(express.json());
 app.use(cors({ 
-  origin: process.env.FRONTEND_URL , 
+  origin: "https://voting-platform-cyan.vercel.app", 
   credentials: true 
 }));
 const MongoStore = require('connect-mongo').default;
@@ -34,6 +34,7 @@ app.use(session({
         mongoUrl: process.env.MONGO_URI,
         collectionName: 'sessions'
     }),
+    proxy: true,
     cookie: {
         secure: true,
         sameSite: 'none',

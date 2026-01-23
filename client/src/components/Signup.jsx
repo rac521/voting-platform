@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, Eye, EyeOff, Vote, ShieldCheck, Sparkles, User, Linkedin } from 'lucide-react';
-import axios from 'axios';
+import api from '../api'
 
 function Signup() {
   // Functional Logic: State for form data exactly as you had it
@@ -19,7 +19,7 @@ function Signup() {
 
     try {
       // Functional Logic: API call to your backend exactly as you had it
-      const res = await axios.post("https://voting-platform-3soe.onrender.com/auth/signup", form, { 
+      const res = await api.post("/auth/signup", form, { 
         withCredentials: true 
       });
       

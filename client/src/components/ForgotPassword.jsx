@@ -14,7 +14,7 @@ const ForgotPassword = () => {
   const handleResetRequest = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("hhttps://voting-platform-3soe.onrender.com/auth/forgot-password", { email });
+      const res = await api.post("/auth/forgot-password", { email });
       setStatus(res.data.message);
       setIsError(false);
       setIsSubmitted(true); 

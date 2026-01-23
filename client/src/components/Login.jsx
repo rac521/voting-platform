@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, Eye, EyeOff, Vote, ShieldCheck, Sparkles, Linkedin } from 'lucide-react';
-import axios from 'axios';
+import api from '../api'
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -13,7 +13,7 @@ function Login() {
     e.preventDefault();
     try {
       // Functional Logic: Linking to your specific backend route
-      const res = await axios.post("https://voting-platform-3soe.onrender.com/auth/login", { email, password }, { withCredentials: true });
+      const res = await api.post("/auth/login", { email, password }, { withCredentials: true });
       if (res.data.success) window.location.href = "/vote";
     } catch (err) { 
       alert("Login failed"); 
